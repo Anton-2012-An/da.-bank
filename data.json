@@ -1,5 +1,12 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "11111",
+      "fullName": "Анурин Антон Максимович",
+      "isAdmin": true,
+      "isCompany": false
+    }
+  ],
   "cards": [],
   "requests": [],
   "notifications": [],
