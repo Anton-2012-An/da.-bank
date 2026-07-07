@@ -17,9 +17,10 @@
         .brand-name { font-size: 2.2rem; font-weight: 400; letter-spacing: -0.02em; color: #1e1e24; }
         .brand-name span { font-weight: 300; color: #8b8b94; }
         .style-tag { font-size: 0.7rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.3em; color: #a0a0ab; background: #f0f0f2; padding: 0.25rem 0.9rem; border-radius: 40px; margin-left: 0.75rem; border: 1px solid rgba(0,0,0,0.02); }
-        .header-right { display: flex; align-items: center; gap: 1.5rem; }
-        .user-info { font-size: 0.95rem; color: #4a4a54; }
+        .header-right { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+        .user-info { font-size: 0.95rem; color: #4a4a54; cursor: pointer; user-select: none; }
         .user-info strong { font-weight: 600; color: #1e1e24; }
+        .user-info:hover { opacity: 0.7; }
         .logout-btn { background: transparent; border: 1px solid #e0e0e6; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.8rem; color: #6c6c7a; cursor: pointer; transition: 0.2s; font-family: inherit; }
         .logout-btn:hover { background: #f0f0f2; border-color: #c0c0ca; }
         .nav-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(0,0,0,0.04); padding-bottom: 0.5rem; flex-wrap: wrap; }
@@ -34,10 +35,12 @@
         .auth-container { max-width: 420px; margin: 1rem auto; }
         .auth-container h2 { font-weight: 400; font-size: 1.5rem; margin-bottom: 0.5rem; }
         .auth-container p { color: #8b8b94; font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .user-select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
-        .user-select-btn { padding: 1rem; border: 2px solid #e8e8ee; border-radius: 16px; background: #fbfbfc; cursor: pointer; transition: 0.2s; font-family: inherit; font-size: 1rem; text-align: center; }
+        .user-select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+        .user-select-btn { padding: 1rem 0.8rem; border: 2px solid #e8e8ee; border-radius: 16px; background: #fbfbfc; cursor: pointer; transition: 0.2s; font-family: inherit; font-size: 1rem; text-align: center; }
         .user-select-btn:hover { border-color: #1e1e24; background: #f0f0f2; transform: translateY(-2px); }
         .user-select-btn .vip-tag { font-size: 0.6rem; background: #9b59b6; color: white; padding: 0.1rem 0.4rem; border-radius: 12px; margin-left: 0.3rem; }
+        .user-select-btn .admin-tag { font-size: 0.6rem; background: #1e1e24; color: white; padding: 0.1rem 0.4rem; border-radius: 12px; margin-left: 0.3rem; }
+        .user-select-btn .role-tag { font-size: 0.6rem; color: #8b8b94; display: block; margin-top: 0.2rem; }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
         .card-item { background: #fbfbfc; border-radius: 28px; padding: 1.5rem; border: 1px solid #f0f0f2; transition: 0.2s; position: relative; }
         .card-item:hover { background: #ffffff; border-color: #e3e3e8; box-shadow: 0 12px 32px -12px rgba(0,0,0,0.06); }
@@ -147,6 +150,8 @@
         .stat-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f2; }
         .qr-container { background: #f7f7f9; border-radius: 12px; padding: 1rem; text-align: center; margin-top: 0.5rem; }
         .qr-container #qrcode { display: inline-block; padding: 0.5rem; background: white; border-radius: 8px; }
+        .switch-user-btn { background: transparent; border: 1px solid #e0e0e6; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.8rem; color: #6c6c7a; cursor: pointer; transition: 0.2s; font-family: inherit; }
+        .switch-user-btn:hover { background: #f0f0f2; border-color: #c0c0ca; }
         @media (max-width: 700px) { .app-container { padding: 1.5rem; border-radius: 32px; } .brand-name { font-size: 1.8rem; } .bank-header { flex-direction: column; align-items: flex-start; } .header-right { width: 100%; justify-content: space-between; } .nav-tabs { gap: 0.3rem; } .nav-tab { padding: 0.4rem 1rem; font-size: 0.8rem; } .admin-cards-table { font-size: 0.75rem; } .admin-cards-table th, .admin-cards-table td { padding: 0.4rem 0.3rem; } .admin-panel .form-row { flex-direction: column; } }
         @media (max-width: 480px) { .app-container { padding: 1rem; border-radius: 24px; } .cards-grid { grid-template-columns: 1fr; } .admin-cards-table { font-size: 0.7rem; } .admin-cards-table th, .admin-cards-table td { padding: 0.3rem 0.2rem; } }
     </style>
@@ -156,8 +161,8 @@
     <header class="bank-header">
         <div class="brand"><div class="brand-name">da.<span>bank</span></div><span class="style-tag">Aurum</span></div>
         <div class="header-right">
-            <div class="user-info"><span id="userNameDisplay">Гость</span><span style="font-size:0.8rem;color:#b0b0bb;margin-left:0.5rem;" id="userIdDisplay"></span><span id="companyBadge" style="display:none;" class="company-badge">🏢 Компания</span><span id="vipBadge" style="display:none;" class="vip-badge">👑 VIP</span></div>
-            <button class="logout-btn" id="logoutBtn" style="display:none;">Выйти</button>
+            <div class="user-info" id="userInfoClick"><span id="userNameDisplay">Гость</span><span style="font-size:0.8rem;color:#b0b0bb;margin-left:0.5rem;" id="userIdDisplay"></span><span id="companyBadge" style="display:none;" class="company-badge">🏢 Компания</span><span id="vipBadge" style="display:none;" class="vip-badge">👑 VIP</span></div>
+            <button class="switch-user-btn" id="switchUserBtn">🔄 Сменить</button>
         </div>
     </header>
     <nav class="nav-tabs">
@@ -171,7 +176,7 @@
         <button class="nav-tab" data-section="vip">👑 VIP</button>
         <button class="nav-tab" data-section="support">Поддержка</button>
         <button class="nav-tab" data-section="notifications">Уведомления <span class="notification-badge" id="notifBadge" style="display:none;">0</span></button>
-        <button class="nav-tab" data-section="admin" id="adminTab" style="display:inline-block;">Админ <span class="notification-badge" id="adminBadge" style="display:none;">0</span></button>
+        <button class="nav-tab" data-section="admin" id="adminTab" style="display:none;">Админ <span class="notification-badge" id="adminBadge" style="display:none;">0</span></button>
     </nav>
 
     <!-- NEWS -->
@@ -492,9 +497,10 @@ const DB = {
     adminCardId: null
 };
 
+// Администратор создаётся в коде, но его имя не показывается как "Антон Админ"
 const ADMIN = {
     id: '11111',
-    fullName: 'Анурин Антон Максимович',
+    fullName: 'Администратор системы',
     isAdmin: true,
     isCompany: false,
     isVip: true,
@@ -684,13 +690,12 @@ function renderCards() {
         const statusText = c.status === 'active' ? 'Активна' : c.status === 'blocked' ? 'Заблокирована' : c.status === 'temp_blocked' ? 'Временно заблокирована' : c.status === 'issued' ? 'Выпущена' : 'Активна';
         const statusClass = c.status === 'active' ? 'active' : c.status === 'blocked' ? 'blocked' : c.status === 'temp_blocked' ? 'temp-blocked' : c.status === 'issued' ? 'issued' : 'active';
         const isVip = DB.currentUser.isVip || false;
-        const isAdmin = DB.currentUser.isAdmin || false;
         return `<div class="card-item">
             <div class="card-number">${c.cardNumber}</div>
             <div class="card-holder">${c.holder}</div>
             <div style="font-size:0.8rem;color:#8b8b94;">Срок: ${c.expiry} | CVV: ${c.cvv}</div>
             <div class="card-balance">${c.balance.toFixed(2)} <small>KLN</small></div>
-            <div style="font-size:0.7rem;color:#b0b0bb;">Тип: ${cardInfo.name}${isVip ? ' 👑' : ''}${isAdmin ? ' ⚡' : ''}</div>
+            <div style="font-size:0.7rem;color:#b0b0bb;">Тип: ${cardInfo.name}${isVip ? ' 👑' : ''}</div>
             <span class="card-status ${statusClass}">${statusText}</span>
             <div class="card-actions">
                 ${c.status === 'issued' ? `<button class="activate-card primary-btn" data-cardid="${c.id}">🔑 Активировать</button>` : ''}
@@ -974,8 +979,7 @@ function renderAdminCards() {
         const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
         const statusText = c.status === 'active' ? 'Активна' : c.status === 'blocked' ? 'Заблокирована' : c.status === 'temp_blocked' ? 'Временно' : c.status === 'issued' ? 'Выпущена' : 'Активна';
         const statusClass = c.status === 'active' ? 'active' : c.status === 'blocked' ? 'blocked' : c.status === 'temp_blocked' ? 'temp-blocked' : c.status === 'issued' ? 'issued' : 'active';
-        const isAdmin = user?.isAdmin || false;
-        return `<tr><td>${index+1}</td><td><strong>${c.cardNumber}</strong></td><td>${c.holder}</td><td>${user ? user.fullName : 'Unknown'} (${c.userId})${isAdmin ? ' ⚡' : ''}${user?.isVip ? ' 👑' : ''}</td><td>${cardInfo.name}</td><td>${c.balance.toFixed(2)} KLN</td><td>${c.expiry}</td><td><span class="status-badge ${statusClass}">${statusText}</span></td></tr>`;
+        return `<tr><td>${index+1}</td><td><strong>${c.cardNumber}</strong></td><td>${c.holder}</td><td>${user ? user.fullName : 'Unknown'} (${c.userId})${user?.isVip ? ' 👑' : ''}</td><td>${cardInfo.name}</td><td>${c.balance.toFixed(2)} KLN</td><td>${c.expiry}</td><td><span class="status-badge ${statusClass}">${statusText}</span></td></tr>`;
     }).join('');
     document.getElementById('statCards').textContent = DB.cards.length;
     document.getElementById('statUsers').textContent = DB.users.filter(u => !u.isAdmin).length;
@@ -1091,19 +1095,16 @@ function updateNotifBadges() {
 function renderUI() {
     const userNameDisplay = document.getElementById('userNameDisplay');
     const userIdDisplay = document.getElementById('userIdDisplay');
-    const logoutBtn = document.getElementById('logoutBtn');
     const companyBadge = document.getElementById('companyBadge');
     const vipBadge = document.getElementById('vipBadge');
     if (DB.currentUser) {
         userNameDisplay.textContent = DB.currentUser.fullName;
         userIdDisplay.textContent = `ID: ${DB.currentUser.id}`;
-        logoutBtn.style.display = 'inline-block';
         if (DB.currentUser.isCompany) { companyBadge.style.display = 'inline-block'; companyBadge.textContent = `🏢 ${DB.currentUser.companyName || 'Компания'}`; } else { companyBadge.style.display = 'none'; }
         if (DB.currentUser.isVip) { vipBadge.style.display = 'inline-block'; } else { vipBadge.style.display = 'none'; }
     } else {
         userNameDisplay.textContent = 'Гость';
         userIdDisplay.textContent = '';
-        logoutBtn.style.display = 'none';
         companyBadge.style.display = 'none';
         vipBadge.style.display = 'none';
     }
@@ -1135,7 +1136,7 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) {
 });
 
 // ============================================================
-//  NAVIGATION
+//  НАВИГАЦИЯ
 // ============================================================
 document.querySelectorAll('.nav-tab[data-section]').forEach(tab => {
     tab.addEventListener('click', function() {
@@ -1154,7 +1155,6 @@ document.querySelectorAll('.nav-tab[data-section]').forEach(tab => {
         if (section === 'loans') renderLoans();
         if (section === 'stats') renderStats();
         if (section === 'vip') renderVip();
-        if (section === 'cardinfo') { /* информация уже в HTML */ }
     });
 });
 
@@ -1170,19 +1170,17 @@ function showUserSelect() {
             <p style="color:#8b8b94;font-size:0.9rem;">Нажмите на имя для входа</p>
         </div>
         <div class="user-select-grid">
-    `;
-    html += `
-        <div class="user-select-btn" onclick="selectUser('11111')">
-            <div style="font-weight:500;">${admin.fullName}</div>
-            <div style="font-size:0.7rem;color:#8b8b94;">Пользователь</div>
-        </div>
+            <div class="user-select-btn" style="border-color:#9b59b6;background:#f5e6ff;" onclick="selectUser('11111')">
+                <div style="font-weight:500;">👑 ${admin.fullName}</div>
+                <span class="role-tag">Администратор</span>
+            </div>
     `;
     users.forEach(u => {
         const isVip = u.isVip || false;
         html += `
             <div class="user-select-btn" onclick="selectUser('${u.id}')">
                 <div style="font-weight:500;">${u.fullName}${isVip ? ' 👑' : ''}</div>
-                <div style="font-size:0.7rem;color:#8b8b94;">Пользователь</div>
+                <span class="role-tag">Пользователь</span>
             </div>
         `;
     });
@@ -1197,9 +1195,32 @@ function selectUser(userId) {
         localStorage.setItem('daBank_currentUser', JSON.stringify(user));
         closeModal();
         renderUI();
+        // Переключаемся на вкладку "Новости" после входа
+        document.querySelectorAll('.nav-tab[data-section]').forEach(t => t.classList.remove('active'));
+        document.querySelector('.nav-tab[data-section="news"]').classList.add('active');
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('section-news').classList.add('active');
         console.log(`👤 Вход выполнен как ${user.fullName}`);
     }
 }
+
+// ============================================================
+//  СМЕНА ПОЛЬЗОВАТЕЛЯ
+// ============================================================
+document.getElementById('switchUserBtn').addEventListener('click', function() {
+    DB.currentUser = null;
+    localStorage.removeItem('daBank_currentUser');
+    renderUI();
+    showUserSelect();
+    console.log('🔄 Смена пользователя');
+});
+
+// Клик на имя пользователя тоже открывает выбор
+document.getElementById('userInfoClick').addEventListener('click', function() {
+    if (DB.currentUser) {
+        showUserSelect();
+    }
+});
 
 // ============================================================
 //  CURRENCY CONVERTER
@@ -1483,7 +1504,7 @@ document.getElementById('adminSearchCardBtn').addEventListener('click', function
     const card = findCardByNumber(query);
     if (card) {
         const user = findUserById(card.userId);
-        const cardInfo = getCardType(parseInt(card.cardNumber.slice(12,13)));
+        const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
         resultEl.innerHTML = `<div style="background:#f7f7f9;padding:1rem;border-radius:16px;">
             <p><strong>Карта:</strong> ${card.cardNumber}</p>
             <p><strong>Владелец:</strong> ${card.holder}</p>
@@ -1665,29 +1686,17 @@ document.getElementById('cardFilterReset').addEventListener('click', function() 
 });
 
 // ============================================================
-//  КНОПКА ВЫЙТИ
-// ============================================================
-document.getElementById('logoutBtn').addEventListener('click', function() {
-    if (confirm('Выйти из аккаунта?')) {
-        DB.currentUser = null;
-        localStorage.removeItem('daBank_currentUser');
-        renderUI();
-        showUserSelect();
-        console.log('👋 Выход выполнен');
-    }
-});
-
-// ============================================================
 //  INIT
 // ============================================================
 async function init() {
     await loadDB();
     
+    // Проверяем, есть ли админ в базе
     let admin = DB.users.find(u => u.id === '11111');
     if (!admin) {
         DB.users.push({ 
             id: '11111', 
-            fullName: 'Анурин Антон Максимович', 
+            fullName: 'Администратор системы', 
             isAdmin: true, 
             isCompany: false, 
             isVip: true,
@@ -1697,6 +1706,7 @@ async function init() {
         admin = DB.users.find(u => u.id === '11111');
     }
     
+    // Проверяем предустановленных пользователей
     let needSave = false;
     for (const preset of PRESET_USERS) {
         const exists = DB.users.some(u => u.id === preset.id);
@@ -1707,6 +1717,7 @@ async function init() {
     }
     if (needSave) await saveDB();
     
+    // Проверяем сохранённую сессию
     const savedUser = localStorage.getItem('daBank_currentUser');
     if (savedUser) {
         try {
@@ -1715,12 +1726,18 @@ async function init() {
             if (found) {
                 DB.currentUser = found;
                 renderUI();
+                // Переключаемся на вкладку "Новости"
+                document.querySelectorAll('.nav-tab[data-section]').forEach(t => t.classList.remove('active'));
+                document.querySelector('.nav-tab[data-section="news"]').classList.add('active');
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById('section-news').classList.add('active');
                 console.log(`👤 Восстановлена сессия: ${found.fullName}`);
                 return;
             }
         } catch (e) {}
     }
     
+    // Если нет сессии — показываем выбор пользователя
     renderUI();
     setTimeout(showUserSelect, 300);
     console.log('👋 Показываем выбор пользователя');
