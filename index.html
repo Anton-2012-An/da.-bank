@@ -377,7 +377,7 @@
 
             <h4>💳 Управление картами</h4>
             <div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:0.5rem;">
-                <input type="text" id="adminCardManage" placeholder="ID карты" style="flex:1;min-width:150px;padding:0.6rem 1rem;border:1px solid #e8e8ee;border-radius:16px;font-family:inherit;" />
+                <input type="text" id="adminCardNumberManage" placeholder="Номер карты (16 цифр)" style="flex:2;min-width:200px;padding:0.6rem 1rem;border:1px solid #e8e8ee;border-radius:16px;font-family:inherit;" />
                 <select id="adminCardAction" style="flex:1;min-width:150px;padding:0.6rem 1rem;border:1px solid #e8e8ee;border-radius:16px;font-family:inherit;">
                     <option value="block">Заблокировать</option>
                     <option value="unblock">Разблокировать</option>
@@ -601,7 +601,6 @@ function generateTransactionId() { return 'TX' + Date.now().toString(36).toUpper
 function findUserByFullName(fullName) { return DB.users.find(u => u.fullName.toLowerCase() === fullName.toLowerCase()); }
 function findUserById(id) { return DB.users.find(u => u.id === id); }
 function findCardByNumber(cardNumber) { const clean = cardNumber.replace(/[\s\-]/g, ''); return DB.cards.find(c => c.cardNumber === clean); }
-function findCardById(id) { return DB.cards.find(c => c.id === id); }
 function getCardsForUser(userId) { return DB.cards.filter(c => c.userId === userId && c.status !== 'issued'); }
 function getIssuedCardsForUser(userId) { return DB.cards.filter(c => c.userId === userId && c.status === 'issued'); }
 function getPendingRequests() { return DB.requests.filter(r => r.status === 'pending'); }
@@ -685,19 +684,19 @@ function renderCards() {
             <div style="font-size:0.7rem;color:#b0b0bb;">Тип: ${cardInfo.name}${isVip ? ' 👑' : ''}</div>
             <span class="card-status ${statusClass}">${statusText}</span>
             <div class="card-actions">
-                ${c.status === 'issued' ? `<button class="activate-card primary-btn" data-cardid="${c.id}">🔑 Активировать</button>` : ''}
-                ${c.cardNumber.slice(12,13) === '2' ? `<button class="show-qr-btn primary-btn" data-cardid="${c.id}">📱 QR-код</button>` : ''}
-                <button class="delete-card" data-cardid="${c.id}">Удалить</button>
-                <button class="card-info-btn" data-cardid="${c.id}">Инфо</button>
-                ${c.status !== 'issued' ? `<button class="card-request-btn" data-cardid="${c.id}">Пополнить</button>` : ''}
+                ${c.status === 'issued' ? `<button class="activate-card primary-btn" data-cardnumber="${c.cardNumber}">🔑 Активировать</button>` : ''}
+                ${c.cardNumber.slice(12,13) === '2' ? `<button class="show-qr-btn primary-btn" data-cardnumber="${c.cardNumber}">📱 QR-код</button>` : ''}
+                <button class="delete-card" data-cardnumber="${c.cardNumber}">Удалить</button>
+                <button class="card-info-btn" data-cardnumber="${c.cardNumber}">Инфо</button>
+                ${c.status !== 'issued' ? `<button class="card-request-btn" data-cardnumber="${c.cardNumber}">Пополнить</button>` : ''}
             </div>
         </div>`;
     }).join('');
 
     document.querySelectorAll('.activate-card').forEach(btn => {
         btn.addEventListener('click', function() {
-            const cardId = this.dataset.cardid;
-            const card = DB.cards.find(c => c.id === cardId);
+            const cardNumber = this.dataset.cardnumber;
+            const card = findCardByNumber(cardNumber);
             if (card && card.status === 'issued') {
                 showModal('Активация карты', `<p>Введите данные с карты:</p><input type="text" id="activateCvv" placeholder="CVV" maxlength="3" /><input type="text" id="activateExpiry" placeholder="Срок MM/YY" /><div id="activateError" class="modal-error"></div><button class="submit-btn" id="confirmActivate">Активировать</button>`);
                 document.getElementById('confirmActivate').addEventListener('click', function() {
@@ -719,8 +718,8 @@ function renderCards() {
 
     document.querySelectorAll('.show-qr-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const cardId = this.dataset.cardid;
-            const card = DB.cards.find(c => c.id === cardId);
+            const cardNumber = this.dataset.cardnumber;
+            const card = findCardByNumber(cardNumber);
             if (card) {
                 const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
                 const qrData = JSON.stringify({
@@ -756,15 +755,18 @@ function renderCards() {
     document.querySelectorAll('.delete-card').forEach(btn => {
         btn.addEventListener('click', function() {
             if (confirm('Удалить карту?')) {
-                DB.cards = DB.cards.filter(c => c.id !== this.dataset.cardid);
-                saveDB(); renderCards(); renderAdmin();
+                const card = findCardByNumber(this.dataset.cardnumber);
+                if (card) {
+                    DB.cards = DB.cards.filter(c => c.cardNumber !== card.cardNumber);
+                    saveDB(); renderCards(); renderAdmin();
+                }
             }
         });
     });
 
     document.querySelectorAll('.card-info-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const card = DB.cards.find(c => c.id === this.dataset.cardid);
+            const card = findCardByNumber(this.dataset.cardnumber);
             if (card) {
                 const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
                 const isVip = DB.currentUser.isVip || false;
@@ -789,8 +791,8 @@ function renderCards() {
 
     document.querySelectorAll('.card-request-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const cardId = this.dataset.cardid;
-            const card = DB.cards.find(c => c.id === cardId);
+            const cardNumber = this.dataset.cardnumber;
+            const card = findCardByNumber(cardNumber);
             if (!card) return;
             showModal('Заявка на пополнение', `
                 <p>Введите сумму для пополнения:</p>
@@ -800,7 +802,7 @@ function renderCards() {
             document.getElementById('submitRequest').addEventListener('click', function() {
                 const amount = parseFloat(document.getElementById('requestAmount').value);
                 if (!amount || amount <= 0) { alert('Введите корректную сумму'); return; }
-                DB.requests.push({ id: Date.now().toString(36)+Math.random().toString(36).substr(2,3), userId: DB.currentUser.id, cardId, amount, status: 'pending', timestamp: Date.now() });
+                DB.requests.push({ id: Date.now().toString(36)+Math.random().toString(36).substr(2,3), userId: DB.currentUser.id, cardNumber: card.cardNumber, amount, status: 'pending', timestamp: Date.now() });
                 saveDB(); closeModal(); renderCards(); renderAdmin();
                 showModal('Заявка отправлена', 'Ожидайте одобрения администратора.');
             });
@@ -877,7 +879,7 @@ function renderLoans() {
                 const contractNum = prompt('Введите номер договора для подтверждения:');
                 if (contractNum && contractNum === loan.contractNumber) {
                     loan.status = 'paying';
-                    const card = DB.cards.find(c => c.id === loan.cardId);
+                    const card = findCardByNumber(loan.cardNumber);
                     if (card) {
                         card.balance += loan.amount;
                         addHistory(loan.userId, 'Кредит получен', `Получен кредит ${loan.contractNumber} на ${loan.amount.toFixed(2)} KLN`);
@@ -916,7 +918,7 @@ function renderStats() {
     const isVip = DB.currentUser.isVip || false;
     cards.forEach(c => {
         const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
-        const cardSpent = monthTransactions.filter(t => t.cardId === c.id).reduce((sum, t) => sum + t.amount, 0);
+        const cardSpent = monthTransactions.filter(t => t.cardNumber === c.cardNumber).reduce((sum, t) => sum + t.amount, 0);
         const cashback = getVipCashback(cardInfo, isVip);
         totalCashback += cardSpent * (cashback / 100);
     });
@@ -991,7 +993,7 @@ function renderAdmin() {
     } else {
         reqContainer.innerHTML = pending.map(r => {
             const user = findUserById(r.userId);
-            const card = DB.cards.find(c => c.id === r.cardId);
+            const card = findCardByNumber(r.cardNumber);
             return `<div class="request-item"><div class="req-info"><strong>${user ? user.fullName : 'Unknown'}</strong> (${r.userId})${user?.isVip ? ' 👑' : ''} — ${card ? card.cardNumber : 'N/A'} — ${r.amount.toFixed(2)} KLN</div><div class="req-actions"><button class="approve-btn" data-reqid="${r.id}">✅</button><button class="reject-btn" data-reqid="${r.id}">❌</button></div></div>`;
         }).join('');
         document.getElementById('adminBadge').style.display = 'inline-block';
@@ -1004,7 +1006,7 @@ function renderAdmin() {
                     document.getElementById('confirmApprove').addEventListener('click', function() {
                         const comment = document.getElementById('approveComment').value || 'Без комментария';
                         req.status = 'approved';
-                        const card = DB.cards.find(c => c.id === req.cardId);
+                        const card = findCardByNumber(req.cardNumber);
                         if (card) { card.balance += req.amount; addHistory(req.userId, 'Пополнение', `Карта ${card.cardNumber} +${req.amount.toFixed(2)} KLN`); }
                         const user = findUserById(req.userId);
                         if (user) { addNotification(user.id, '✅ Заявка одобрена', `Пополнение на ${req.amount.toFixed(2)} KLN. Комментарий: "${comment}"`, 'approved'); }
@@ -1273,11 +1275,11 @@ document.getElementById('activateCardBtn').addEventListener('click', function() 
     if (!DB.currentUser) { showModal('Ошибка', 'Выберите пользователя'); return; }
     const issued = getIssuedCardsForUser(DB.currentUser.id);
     if (issued.length === 0) { showModal('Нет карт', 'Нет карт для активации'); return; }
-    let cardsHtml = issued.map(c => `<div style="background:#f7f7f9;border-radius:12px;padding:1rem;margin-bottom:0.5rem;"><div><strong>${c.cardNumber}</strong> — ${c.holder}</div><button class="activate-from-list primary-btn" data-cardid="${c.id}" style="padding:0.3rem 1rem;border:none;border-radius:40px;background:#1e1e24;color:white;cursor:pointer;">🔑 Активировать</button></div>`).join('');
+    let cardsHtml = issued.map(c => `<div style="background:#f7f7f9;border-radius:12px;padding:1rem;margin-bottom:0.5rem;"><div><strong>${c.cardNumber}</strong> — ${c.holder}</div><button class="activate-from-list primary-btn" data-cardnumber="${c.cardNumber}" style="padding:0.3rem 1rem;border:none;border-radius:40px;background:#1e1e24;color:white;cursor:pointer;">🔑 Активировать</button></div>`).join('');
     showModal('Активация карты', `<p>Выберите карту:</p>${cardsHtml}`);
     document.querySelectorAll('.activate-from-list').forEach(btn => {
         btn.addEventListener('click', function() {
-            const card = DB.cards.find(c => c.id === this.dataset.cardid);
+            const card = findCardByNumber(this.dataset.cardnumber);
             if (card) {
                 closeModal();
                 showModal('Активация', `<p>Введите данные с карты:</p><input type="text" id="activateCvv" placeholder="CVV" maxlength="3" /><input type="text" id="activateExpiry" placeholder="Срок MM/YY" /><div id="activateError" class="modal-error"></div><button class="submit-btn" id="confirmActivate">Активировать</button>`);
@@ -1340,7 +1342,7 @@ document.getElementById('adminIssueCardBtn').addEventListener('click', function(
     const cardNumber = generateCardNumber(type, userId);
     const cardInfo = getCardType(type);
     const isVip = user.isVip || false;
-    const cardCost = 0; // Бесплатно!
+    const cardCost = 0;
     const cvv = cardInfo.cvv;
     const now = new Date();
     const expiryMonth = String(now.getMonth()+1).padStart(2,'0');
@@ -1350,7 +1352,6 @@ document.getElementById('adminIssueCardBtn').addEventListener('click', function(
     const issueYear = String(now.getFullYear()).slice(-2);
     const issueDate = `${issueMonth}/${issueYear}`;
     
-    // Определяем пин-код: для первой карты в системе — 1174
     let pin = Math.floor(1000+Math.random()*9000).toString();
     if (DB.cards.length === 0) {
         pin = '1174';
@@ -1447,7 +1448,7 @@ document.getElementById('adminAddLoanBtn').addEventListener('click', function() 
     const endDate = new Date(startDate); endDate.setMonth(endDate.getMonth() + term);
     const loan = {
         id: Date.now().toString(36)+Math.random().toString(36).substr(2,3),
-        userId: user.id, cardId: card.id, amount, rate, term, monthlyPayment,
+        userId: user.id, cardNumber: card.cardNumber, amount, rate, term, monthlyPayment,
         contractNumber, startDate, endDate: endDate.toISOString().split('T')[0],
         remainingMonths: term, status: 'pending', timestamp: Date.now()
     };
@@ -1500,7 +1501,7 @@ document.getElementById('adminSearchLoanBtn').addEventListener('click', function
     const loan = DB.loans.find(l => l.contractNumber === query);
     if (loan) {
         const user = findUserById(loan.userId);
-        const card = DB.cards.find(c => c.id === loan.cardId);
+        const card = findCardByNumber(loan.cardNumber);
         const statusMap = { 'paying': '🟢 Оплачивается', 'ending': '🟡 Заканчивается', 'finished': '🔵 Закончен', 'overdue': '🔴 Просрочен', 'pending': '⏳ Ожидает' };
         resultEl.innerHTML = `<div style="background:#f7f7f9;padding:1rem;border-radius:16px;">
             <p><strong>Договор:</strong> ${loan.contractNumber}</p>
@@ -1520,14 +1521,14 @@ document.getElementById('adminSearchLoanBtn').addEventListener('click', function
 });
 
 // ============================================================
-//  ADMIN: CARD MANAGEMENT
+//  ADMIN: CARD MANAGEMENT (ПО НОМЕРУ КАРТЫ)
 // ============================================================
 document.getElementById('adminCardActionBtn').addEventListener('click', function() {
-    const cardId = document.getElementById('adminCardManage').value.trim();
+    const cardNumber = document.getElementById('adminCardNumberManage').value.trim();
     const action = document.getElementById('adminCardAction').value;
     const resultEl = document.getElementById('adminCardActionResult');
-    if (!cardId) { resultEl.innerHTML = '<span style="color:#d14c4c;">Введите ID карты</span>'; return; }
-    const card = DB.cards.find(c => c.id === cardId);
+    if (!cardNumber) { resultEl.innerHTML = '<span style="color:#d14c4c;">Введите номер карты</span>'; return; }
+    const card = findCardByNumber(cardNumber);
     if (!card) { resultEl.innerHTML = '<span style="color:#d14c4c;">Карта не найдена</span>'; return; }
     switch(action) {
         case 'block':
@@ -1563,7 +1564,6 @@ document.getElementById('adminAddBalanceBtn').addEventListener('click', function
     const card = findCardByNumber(cardNumber);
     if (!card) { resultEl.innerHTML = '<span style="color:#d14c4c;">Карта не найдена</span>'; return; }
     
-    // Если сумма отрицательная (списание) — проверяем, что это делает администратор
     if (amount < 0 && !DB.currentUser?.isAdmin) {
         resultEl.innerHTML = '<span style="color:#d14c4c;">❌ Только администратор может списывать средства</span>';
         return;
@@ -1633,15 +1633,12 @@ document.getElementById('payBtn').addEventListener('click', function() {
         return;
     }
     
-    // Списание с карты плательщика
     card.balance -= totalAmount;
     
-    // Начисление комиссии администратору
     const adminCard = DB.cards.find(c => c.userId === '11111');
     if (adminCard) {
         adminCard.balance += commission;
     } else {
-        // Создаём карту администратору, если её нет
         const newAdminCard = {
             id: Date.now().toString(36)+Math.random().toString(36).substr(2,3),
             userId: '11111',
@@ -1679,7 +1676,7 @@ document.getElementById('payBtn').addEventListener('click', function() {
     DB.transactions.push({ 
         id: transactionId, 
         userId: DB.currentUser.id, 
-        cardId: card.id, 
+        cardNumber: card.cardNumber,
         amount, 
         commission, 
         total: totalAmount, 
