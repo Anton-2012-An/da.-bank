@@ -20,10 +20,8 @@
         .header-right { display: flex; align-items: center; gap: 1.5rem; }
         .user-info { font-size: 0.95rem; color: #4a4a54; }
         .user-info strong { font-weight: 600; color: #1e1e24; }
-        .logout-btn, .login-btn { background: transparent; border: 1px solid #e0e0e6; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.8rem; color: #6c6c7a; cursor: pointer; transition: 0.2s; font-family: inherit; }
+        .logout-btn { background: transparent; border: 1px solid #e0e0e6; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.8rem; color: #6c6c7a; cursor: pointer; transition: 0.2s; font-family: inherit; }
         .logout-btn:hover { background: #f0f0f2; border-color: #c0c0ca; }
-        .login-btn { background: #1e1e24; color: white; border: none; }
-        .login-btn:hover { background: #2d2d36; }
         .nav-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(0,0,0,0.04); padding-bottom: 0.5rem; flex-wrap: wrap; }
         .nav-tab { background: transparent; border: none; padding: 0.6rem 1.5rem; font-size: 0.9rem; font-weight: 400; color: #8b8b94; cursor: pointer; border-radius: 40px; transition: 0.2s; font-family: inherit; position: relative; }
         .nav-tab:hover { color: #1e1e24; background: #f0f0f2; }
@@ -36,16 +34,10 @@
         .auth-container { max-width: 420px; margin: 1rem auto; }
         .auth-container h2 { font-weight: 400; font-size: 1.5rem; margin-bottom: 0.5rem; }
         .auth-container p { color: #8b8b94; font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .auth-form input, .auth-form select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e8e8ee; border-radius: 16px; font-size: 0.95rem; margin-bottom: 0.8rem; font-family: inherit; background: #fbfbfc; transition: 0.2s; }
-        .auth-form input:focus, .auth-form select:focus { outline: none; border-color: #b0b0bb; background: white; }
-        .auth-form label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #4a4a54; margin-bottom: 0.8rem; cursor: pointer; }
-        .auth-form label input[type="checkbox"] { width: auto; margin: 0; }
-        .auth-form button { width: 100%; padding: 0.8rem; border: none; border-radius: 40px; background: #1e1e24; color: white; font-size: 1rem; font-weight: 500; cursor: pointer; transition: 0.2s; font-family: inherit; margin-top: 0.3rem; }
-        .auth-form button:hover { background: #2d2d36; }
-        .auth-switch { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #8b8b94; }
-        .auth-switch a { color: #1e1e24; text-decoration: none; font-weight: 500; cursor: pointer; }
-        .auth-switch a:hover { text-decoration: underline; }
-        .error-msg { color: #d14c4c; font-size: 0.85rem; margin: 0.5rem 0; display: none; }
+        .user-select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+        .user-select-btn { padding: 1rem; border: 2px solid #e8e8ee; border-radius: 16px; background: #fbfbfc; cursor: pointer; transition: 0.2s; font-family: inherit; font-size: 1rem; text-align: center; }
+        .user-select-btn:hover { border-color: #1e1e24; background: #f0f0f2; transform: translateY(-2px); }
+        .user-select-btn .vip-tag { font-size: 0.6rem; background: #9b59b6; color: white; padding: 0.1rem 0.4rem; border-radius: 12px; margin-left: 0.3rem; }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
         .card-item { background: #fbfbfc; border-radius: 28px; padding: 1.5rem; border: 1px solid #f0f0f2; transition: 0.2s; position: relative; }
         .card-item:hover { background: #ffffff; border-color: #e3e3e8; box-shadow: 0 12px 32px -12px rgba(0,0,0,0.06); }
@@ -165,7 +157,6 @@
         <div class="brand"><div class="brand-name">da.<span>bank</span></div><span class="style-tag">Aurum</span></div>
         <div class="header-right">
             <div class="user-info"><span id="userNameDisplay">Гость</span><span style="font-size:0.8rem;color:#b0b0bb;margin-left:0.5rem;" id="userIdDisplay"></span><span id="companyBadge" style="display:none;" class="company-badge">🏢 Компания</span><span id="vipBadge" style="display:none;" class="vip-badge">👑 VIP</span></div>
-            <button class="login-btn" id="loginBtn" style="display:none;">🔑 Войти</button>
             <button class="logout-btn" id="logoutBtn" style="display:none;">Выйти</button>
         </div>
     </header>
@@ -452,6 +443,17 @@ const FILE_PATH = 'data.json';
 const BRANCH = 'main';
 
 // ============================================================
+//  ПРЕДУСТАНОВЛЕННЫЕ ПОЛЬЗОВАТЕЛИ
+// ============================================================
+const PRESET_USERS = [
+    { id: '10001', fullName: 'Дима', isAdmin: false, isCompany: false, isVip: false, password: '' },
+    { id: '10002', fullName: 'Вера', isAdmin: false, isCompany: false, isVip: false, password: '' },
+    { id: '10003', fullName: 'Антон', isAdmin: false, isCompany: false, isVip: false, password: '' },
+    { id: '10004', fullName: 'Максим', isAdmin: false, isCompany: false, isVip: false, password: '' },
+    { id: '10005', fullName: 'Ольга', isAdmin: false, isCompany: false, isVip: false, password: '' }
+];
+
+// ============================================================
 //  КУРСЫ ВАЛЮТ
 // ============================================================
 const CURRENCY_RATES = { BYN: 1, USD: 0.34, EUR: 0.30, RUB: 27.93, CNY: 2.22 };
@@ -486,7 +488,7 @@ const DB = {
     transactions: [],
     cashback: [],
     currentUser: null,
-    nextUserId: 10000,
+    nextUserId: 20000,
     adminCardId: null
 };
 
@@ -510,6 +512,15 @@ async function loadDB() {
         Object.assign(DB, data);
         const adminExists = DB.users.some(u => u.id === '11111');
         if (!adminExists) { DB.users.push({ ...ADMIN }); await saveDB(); }
+        let needSave = false;
+        for (const preset of PRESET_USERS) {
+            const exists = DB.users.some(u => u.id === preset.id);
+            if (!exists) {
+                DB.users.push({ ...preset });
+                needSave = true;
+            }
+        }
+        if (needSave) await saveDB();
         console.log('✅ Данные загружены');
         return true;
     } catch (error) {
@@ -518,7 +529,7 @@ async function loadDB() {
             const backup = localStorage.getItem('daBankDB_backup');
             if (backup) { Object.assign(DB, JSON.parse(backup)); return true; }
         } catch (e) {}
-        DB.users = [{ ...ADMIN }];
+        DB.users = [{ ...ADMIN }, ...PRESET_USERS];
         DB.cards = [];
         DB.requests = [];
         DB.notifications = [];
@@ -655,7 +666,7 @@ function renderCards() {
     const container = document.getElementById('cardsContainer');
     const noMsg = document.getElementById('noCardsMsg');
     if (!DB.currentUser) {
-        container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Войдите в аккаунт</div>';
+        container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Выберите пользователя</div>';
         noMsg.style.display = 'none';
         return;
     }
@@ -673,12 +684,13 @@ function renderCards() {
         const statusText = c.status === 'active' ? 'Активна' : c.status === 'blocked' ? 'Заблокирована' : c.status === 'temp_blocked' ? 'Временно заблокирована' : c.status === 'issued' ? 'Выпущена' : 'Активна';
         const statusClass = c.status === 'active' ? 'active' : c.status === 'blocked' ? 'blocked' : c.status === 'temp_blocked' ? 'temp-blocked' : c.status === 'issued' ? 'issued' : 'active';
         const isVip = DB.currentUser.isVip || false;
+        const isAdmin = DB.currentUser.isAdmin || false;
         return `<div class="card-item">
             <div class="card-number">${c.cardNumber}</div>
             <div class="card-holder">${c.holder}</div>
             <div style="font-size:0.8rem;color:#8b8b94;">Срок: ${c.expiry} | CVV: ${c.cvv}</div>
             <div class="card-balance">${c.balance.toFixed(2)} <small>KLN</small></div>
-            <div style="font-size:0.7rem;color:#b0b0bb;">Тип: ${cardInfo.name}${isVip ? ' 👑' : ''}</div>
+            <div style="font-size:0.7rem;color:#b0b0bb;">Тип: ${cardInfo.name}${isVip ? ' 👑' : ''}${isAdmin ? ' ⚡' : ''}</div>
             <span class="card-status ${statusClass}">${statusText}</span>
             <div class="card-actions">
                 ${c.status === 'issued' ? `<button class="activate-card primary-btn" data-cardid="${c.id}">🔑 Активировать</button>` : ''}
@@ -806,7 +818,7 @@ function renderCards() {
 
 function renderNotifications() {
     const container = document.getElementById('notificationsContainer');
-    if (!DB.currentUser) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Войдите в аккаунт</div>'; return; }
+    if (!DB.currentUser) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Выберите пользователя</div>'; return; }
     const notifs = getNotificationsForUser(DB.currentUser.id);
     if (notifs.length === 0) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Нет уведомлений</div>'; return; }
     container.innerHTML = notifs.map(n => `<div class="notification-item"><div class="notif-date">${new Date(n.timestamp).toLocaleString()}</div><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div></div>`).join('');
@@ -815,7 +827,7 @@ function renderNotifications() {
 
 function renderHistory() {
     const container = document.getElementById('historyContainer');
-    if (!DB.currentUser) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:1rem 0;">Войдите в аккаунт</div>'; return; }
+    if (!DB.currentUser) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:1rem 0;">Выберите пользователя</div>'; return; }
     const history = getHistoryForUser(DB.currentUser.id);
     if (history.length === 0) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:1rem 0;">История пуста</div>'; return; }
     container.innerHTML = history.slice(0,20).map(h => `<div class="history-item"><div class="h-date">${new Date(h.timestamp).toLocaleString()}</div><div><strong>${h.action}</strong> ${h.details}</div></div>`).join('');
@@ -831,7 +843,7 @@ function renderTickets() {
 
 function renderLoans() {
     const container = document.getElementById('loansContainer');
-    if (!DB.currentUser) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Войдите в аккаунт</div>'; return; }
+    if (!DB.currentUser) { container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Выберите пользователя</div>'; return; }
     const loans = getLoansForUser(DB.currentUser.id);
     const pendingLoans = getPendingLoansForUser(DB.currentUser.id);
     if (loans.length === 0 && pendingLoans.length === 0) {
@@ -899,7 +911,7 @@ function renderLoans() {
 function renderStats() {
     const container = document.getElementById('statsContainer');
     if (!DB.currentUser) {
-        container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Войдите в аккаунт</div>';
+        container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Выберите пользователя</div>';
         return;
     }
     const now = new Date();
@@ -929,7 +941,7 @@ function renderStats() {
 function renderVip() {
     const container = document.getElementById('vipContainer');
     if (!DB.currentUser) {
-        container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Войдите в аккаунт для просмотра VIP-информации</div>';
+        container.innerHTML = '<div style="color:#b0b0bb;text-align:center;padding:2rem 0;">Выберите пользователя</div>';
         return;
     }
     const isVip = DB.currentUser.isVip || false;
@@ -962,7 +974,8 @@ function renderAdminCards() {
         const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
         const statusText = c.status === 'active' ? 'Активна' : c.status === 'blocked' ? 'Заблокирована' : c.status === 'temp_blocked' ? 'Временно' : c.status === 'issued' ? 'Выпущена' : 'Активна';
         const statusClass = c.status === 'active' ? 'active' : c.status === 'blocked' ? 'blocked' : c.status === 'temp_blocked' ? 'temp-blocked' : c.status === 'issued' ? 'issued' : 'active';
-        return `<tr><td>${index+1}</td><td><strong>${c.cardNumber}</strong></td><td>${c.holder}</td><td>${user ? user.fullName : 'Unknown'} (${c.userId})${user?.isVip ? ' 👑' : ''}</td><td>${cardInfo.name}</td><td>${c.balance.toFixed(2)} KLN</td><td>${c.expiry}</td><td><span class="status-badge ${statusClass}">${statusText}</span></td></tr>`;
+        const isAdmin = user?.isAdmin || false;
+        return `<tr><td>${index+1}</td><td><strong>${c.cardNumber}</strong></td><td>${c.holder}</td><td>${user ? user.fullName : 'Unknown'} (${c.userId})${isAdmin ? ' ⚡' : ''}${user?.isVip ? ' 👑' : ''}</td><td>${cardInfo.name}</td><td>${c.balance.toFixed(2)} KLN</td><td>${c.expiry}</td><td><span class="status-badge ${statusClass}">${statusText}</span></td></tr>`;
     }).join('');
     document.getElementById('statCards').textContent = DB.cards.length;
     document.getElementById('statUsers').textContent = DB.users.filter(u => !u.isAdmin).length;
@@ -1079,21 +1092,18 @@ function renderUI() {
     const userNameDisplay = document.getElementById('userNameDisplay');
     const userIdDisplay = document.getElementById('userIdDisplay');
     const logoutBtn = document.getElementById('logoutBtn');
-    const loginBtn = document.getElementById('loginBtn');
     const companyBadge = document.getElementById('companyBadge');
     const vipBadge = document.getElementById('vipBadge');
     if (DB.currentUser) {
         userNameDisplay.textContent = DB.currentUser.fullName;
         userIdDisplay.textContent = `ID: ${DB.currentUser.id}`;
         logoutBtn.style.display = 'inline-block';
-        loginBtn.style.display = 'none';
         if (DB.currentUser.isCompany) { companyBadge.style.display = 'inline-block'; companyBadge.textContent = `🏢 ${DB.currentUser.companyName || 'Компания'}`; } else { companyBadge.style.display = 'none'; }
         if (DB.currentUser.isVip) { vipBadge.style.display = 'inline-block'; } else { vipBadge.style.display = 'none'; }
     } else {
         userNameDisplay.textContent = 'Гость';
         userIdDisplay.textContent = '';
         logoutBtn.style.display = 'none';
-        loginBtn.style.display = 'inline-block';
         companyBadge.style.display = 'none';
         vipBadge.style.display = 'none';
     }
@@ -1149,66 +1159,47 @@ document.querySelectorAll('.nav-tab[data-section]').forEach(tab => {
 });
 
 // ============================================================
-//  AUTH
+//  ВЫБОР ПОЛЬЗОВАТЕЛЯ
 // ============================================================
-function showAuth() {
-    showModal('Вход / Регистрация', `
-        <div class="auth-container">
-            <div id="authForm">
-                <h2>Вход в аккаунт</h2>
-                <p>Введите ФИО и пароль</p>
-                <div class="auth-form">
-                    <input type="text" id="authFullName" placeholder="Иванов Иван Иванович" />
-                    <input type="password" id="authPassword" placeholder="Пароль (минимум 4 символа)" />
-                    <label><input type="checkbox" id="authIsCompany" /> Это аккаунт компании</label>
-                    <input type="text" id="authCompanyName" placeholder="Название компании" style="display:none;" />
-                    <button id="authLoginBtn">Войти</button>
-                    <button id="authRegisterBtn" style="background:#f0f0f2;color:#1e1e24;margin-top:0.5rem;">Зарегистрироваться</button>
-                </div>
-                <div id="authError" class="error-msg"></div>
-            </div>
+function showUserSelect() {
+    const admin = DB.users.find(u => u.id === '11111');
+    const users = DB.users.filter(u => u.id !== '11111');
+    let html = `
+        <div style="text-align:center;margin-bottom:1rem;">
+            <h3 style="font-weight:400;">👋 Выберите пользователя</h3>
+            <p style="color:#8b8b94;font-size:0.9rem;">Нажмите на имя для входа</p>
         </div>
-    `);
-    document.getElementById('authIsCompany').addEventListener('change', function() {
-        document.getElementById('authCompanyName').style.display = this.checked ? 'block' : 'none';
+        <div class="user-select-grid">
+    `;
+    html += `
+        <div class="user-select-btn" onclick="selectUser('11111')">
+            <div style="font-weight:500;">${admin.fullName}</div>
+            <div style="font-size:0.7rem;color:#8b8b94;">Пользователь</div>
+        </div>
+    `;
+    users.forEach(u => {
+        const isVip = u.isVip || false;
+        html += `
+            <div class="user-select-btn" onclick="selectUser('${u.id}')">
+                <div style="font-weight:500;">${u.fullName}${isVip ? ' 👑' : ''}</div>
+                <div style="font-size:0.7rem;color:#8b8b94;">Пользователь</div>
+            </div>
+        `;
     });
-    document.getElementById('authLoginBtn').addEventListener('click', function() {
-        const fullName = document.getElementById('authFullName').value.trim();
-        const password = document.getElementById('authPassword').value.trim();
-        if (!fullName || !password) { document.getElementById('authError').textContent = 'Введите ФИО и пароль'; document.getElementById('authError').style.display = 'block'; return; }
-        const user = findUserByFullName(fullName);
-        if (user) {
-            if (user.password !== password) { document.getElementById('authError').textContent = 'Неверный пароль'; document.getElementById('authError').style.display = 'block'; return; }
-            DB.currentUser = user;
-            localStorage.setItem('daBank_currentUser', JSON.stringify(user));
-            saveDB(); closeModal(); renderUI();
-        } else {
-            document.getElementById('authError').textContent = 'Пользователь не найден. Зарегистрируйтесь.';
-            document.getElementById('authError').style.display = 'block';
-        }
-    });
-    document.getElementById('authRegisterBtn').addEventListener('click', function() {
-        const fullName = document.getElementById('authFullName').value.trim();
-        const password = document.getElementById('authPassword').value.trim();
-        const isCompany = document.getElementById('authIsCompany').checked;
-        const companyName = document.getElementById('authCompanyName').value.trim();
-        if (!fullName || !password) { document.getElementById('authError').textContent = 'Введите ФИО и пароль'; document.getElementById('authError').style.display = 'block'; return; }
-        if (password.length < 4) { document.getElementById('authError').textContent = 'Пароль должен быть минимум 4 символа'; document.getElementById('authError').style.display = 'block'; return; }
-        if (findUserByFullName(fullName)) { document.getElementById('authError').textContent = 'Пользователь уже существует'; document.getElementById('authError').style.display = 'block'; return; }
-        if (isCompany && !companyName) { document.getElementById('authError').textContent = 'Введите название компании'; document.getElementById('authError').style.display = 'block'; return; }
-        const newUser = { id: generateUniqueUserId(), fullName, password, isAdmin: false, isCompany, isVip: false, companyName: isCompany ? companyName : null };
-        DB.users.push(newUser);
-        DB.currentUser = newUser;
-        localStorage.setItem('daBank_currentUser', JSON.stringify(newUser));
-        saveDB(); closeModal(); renderUI();
-        showModal('Добро пожаловать!', `Вы зарегистрировались. Ваш ID: <strong>${newUser.id}</strong>`);
-    });
+    html += `</div>`;
+    showModal('Выбор аккаунта', html);
 }
 
-document.getElementById('loginBtn').addEventListener('click', function() { showAuth(); });
-document.getElementById('logoutBtn').addEventListener('click', function() {
-    if (confirm('Выйти?')) { DB.currentUser = null; localStorage.removeItem('daBank_currentUser'); saveDB(); renderUI(); showAuth(); }
-});
+function selectUser(userId) {
+    const user = DB.users.find(u => u.id === userId);
+    if (user) {
+        DB.currentUser = user;
+        localStorage.setItem('daBank_currentUser', JSON.stringify(user));
+        closeModal();
+        renderUI();
+        console.log(`👤 Вход выполнен как ${user.fullName}`);
+    }
+}
 
 // ============================================================
 //  CURRENCY CONVERTER
@@ -1225,7 +1216,7 @@ document.getElementById('convertBtn').addEventListener('click', function() {
 //  ADD CARD
 // ============================================================
 document.getElementById('addCardBtn').addEventListener('click', function() {
-    if (!DB.currentUser) { showModal('Ошибка', 'Войдите в аккаунт'); return; }
+    if (!DB.currentUser) { showModal('Ошибка', 'Выберите пользователя'); return; }
     showModal('Добавление карты', `
         <p>Введите данные карты (карту должен выпустить администратор):</p>
         <input type="text" id="cardNumber" placeholder="Номер карты (16 цифр)" maxlength="16" />
@@ -1273,7 +1264,7 @@ document.getElementById('addCardBtn').addEventListener('click', function() {
 //  ACTIVATE CARD
 // ============================================================
 document.getElementById('activateCardBtn').addEventListener('click', function() {
-    if (!DB.currentUser) { showModal('Ошибка', 'Войдите в аккаунт'); return; }
+    if (!DB.currentUser) { showModal('Ошибка', 'Выберите пользователя'); return; }
     const issued = getIssuedCardsForUser(DB.currentUser.id);
     if (issued.length === 0) { showModal('Нет карт', 'Нет карт для активации'); return; }
     let cardsHtml = issued.map(c => `<div style="background:#f7f7f9;border-radius:12px;padding:1rem;margin-bottom:0.5rem;"><div><strong>${c.cardNumber}</strong> — ${c.holder}</div><button class="activate-from-list primary-btn" data-cardid="${c.id}" style="padding:0.3rem 1rem;border:none;border-radius:40px;background:#1e1e24;color:white;cursor:pointer;">🔑 Активировать</button></div>`).join('');
@@ -1362,7 +1353,6 @@ document.getElementById('adminIssueCardBtn').addEventListener('click', function(
         status: 'issued',
         blockExpiry: null
     };
-    // Списание стоимости карты если нужно
     if (cardCost > 0) {
         const userCards = DB.cards.filter(c => c.userId === userId && c.status !== 'issued');
         if (userCards.length > 0) {
@@ -1584,7 +1574,7 @@ document.getElementById('adminAddBalanceBtn').addEventListener('click', function
 //  PAY
 // ============================================================
 document.getElementById('payBtn').addEventListener('click', function() {
-    if (!DB.currentUser) { showModal('Ошибка', 'Войдите в аккаунт'); return; }
+    if (!DB.currentUser) { showModal('Ошибка', 'Выберите пользователя'); return; }
     const cardNumber = document.getElementById('payCardNumber').value.trim();
     const cvv = document.getElementById('payCvv').value.trim();
     const expiry = document.getElementById('payExpiry').value.trim();
@@ -1649,7 +1639,7 @@ document.getElementById('payBtn').addEventListener('click', function() {
 //  SUPPORT
 // ============================================================
 document.getElementById('supportSendBtn').addEventListener('click', function() {
-    if (!DB.currentUser) { showModal('Ошибка', 'Войдите в аккаунт'); return; }
+    if (!DB.currentUser) { showModal('Ошибка', 'Выберите пользователя'); return; }
     const subject = document.getElementById('supportSubject').value.trim();
     const message = document.getElementById('supportMessage').value.trim();
     const resultEl = document.getElementById('supportResult');
@@ -1675,13 +1665,24 @@ document.getElementById('cardFilterReset').addEventListener('click', function() 
 });
 
 // ============================================================
-//  INIT (АВТОМАТИЧЕСКИЙ ВХОД АДМИНА)
+//  КНОПКА ВЫЙТИ
+// ============================================================
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    if (confirm('Выйти из аккаунта?')) {
+        DB.currentUser = null;
+        localStorage.removeItem('daBank_currentUser');
+        renderUI();
+        showUserSelect();
+        console.log('👋 Выход выполнен');
+    }
+});
+
+// ============================================================
+//  INIT
 // ============================================================
 async function init() {
     await loadDB();
-    renderUI();
     
-    // Автоматический вход админа
     let admin = DB.users.find(u => u.id === '11111');
     if (!admin) {
         DB.users.push({ 
@@ -1696,13 +1697,39 @@ async function init() {
         admin = DB.users.find(u => u.id === '11111');
     }
     
-    DB.currentUser = admin;
-    localStorage.setItem('daBank_currentUser', JSON.stringify(admin));
+    let needSave = false;
+    for (const preset of PRESET_USERS) {
+        const exists = DB.users.some(u => u.id === preset.id);
+        if (!exists) {
+            DB.users.push({ ...preset });
+            needSave = true;
+        }
+    }
+    if (needSave) await saveDB();
+    
+    const savedUser = localStorage.getItem('daBank_currentUser');
+    if (savedUser) {
+        try {
+            const user = JSON.parse(savedUser);
+            const found = DB.users.find(u => u.id === user.id);
+            if (found) {
+                DB.currentUser = found;
+                renderUI();
+                console.log(`👤 Восстановлена сессия: ${found.fullName}`);
+                return;
+            }
+        } catch (e) {}
+    }
+    
     renderUI();
-    console.log('👑 Админ автоматически вошёл в систему');
+    setTimeout(showUserSelect, 300);
+    console.log('👋 Показываем выбор пользователя');
 }
 init();
 
+// ============================================================
+//  НАВИГАЦИЯ ПО УВЕДОМЛЕНИЯМ
+// ============================================================
 document.getElementById('notifTab').addEventListener('click', function() {
     if (DB.currentUser) {
         DB.notifications.forEach(n => { if (n.userId === DB.currentUser.id) n.read = true; });
