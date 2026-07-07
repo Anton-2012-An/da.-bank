@@ -152,6 +152,7 @@
         .qr-container #qrcode { display: inline-block; padding: 0.5rem; background: white; border-radius: 8px; }
         .switch-user-btn { background: transparent; border: 1px solid #e0e0e6; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.8rem; color: #6c6c7a; cursor: pointer; transition: 0.2s; font-family: inherit; }
         .switch-user-btn:hover { background: #f0f0f2; border-color: #c0c0ca; }
+        .free-tag { display: inline-block; background: #d4edda; color: #155724; padding: 0.1rem 0.6rem; border-radius: 20px; font-size: 0.65rem; font-weight: 500; margin-left: 0.4rem; }
         @media (max-width: 700px) { .app-container { padding: 1.5rem; border-radius: 32px; } .brand-name { font-size: 1.8rem; } .bank-header { flex-direction: column; align-items: flex-start; } .header-right { width: 100%; justify-content: space-between; } .nav-tabs { gap: 0.3rem; } .nav-tab { padding: 0.4rem 1rem; font-size: 0.8rem; } .admin-cards-table { font-size: 0.75rem; } .admin-cards-table th, .admin-cards-table td { padding: 0.4rem 0.3rem; } .admin-panel .form-row { flex-direction: column; } }
         @media (max-width: 480px) { .app-container { padding: 1rem; border-radius: 24px; } .cards-grid { grid-template-columns: 1fr; } .admin-cards-table { font-size: 0.7rem; } .admin-cards-table th, .admin-cards-table td { padding: 0.3rem 0.2rem; } }
     </style>
@@ -185,7 +186,7 @@
         <div class="news-item"><div class="news-date">Сегодня</div><div class="news-title">💎 Новая валюта — Клан (KLN)!</div><div class="news-text">Теперь в da.bank доступна собственная валюта <strong>Клан (KLN)</strong>. 1 KLN = 1 BYN. Конвертируйте в любую валюту в разделе «Валюта».</div></div>
         <div class="news-item"><div class="news-date">Сегодня</div><div class="news-title">👑 VIP-статус доступен!</div><div class="news-text">Теперь администратор может выдавать <strong>VIP-статус</strong>. Привилегии: повышенный кешбэк, сниженная комиссия, бесплатная виртуальная карта и приоритетная поддержка.</div></div>
         <div class="news-item"><div class="news-date">Вчера</div><div class="news-title">🏦 Кредитование доступно!</div><div class="news-text">Оформите кредит в отделении банка (комната 2). Администратор добавит договор, после чего вы сможете подтвердить или отклонить его в разделе «Кредиты».</div></div>
-        <div class="info-box"><strong>📌 Справка:</strong> Полный функционал банка: карты, оплата, кредиты, конвертер валют, статистика расходов, кешбэк и VIP-статус.</div>
+        <div class="info-box"><strong>📌 Справка:</strong> Все карты выпускаются <strong>бесплатно</strong>! Комиссия при оплате списывается со счета администратора.</div>
     </div>
 
     <!-- CARDS -->
@@ -205,13 +206,16 @@
     <!-- CARD INFO -->
     <div class="section" id="section-cardinfo">
         <h2 style="font-weight:400;font-size:1.3rem;margin-bottom:1rem;">📋 Информация о картах</h2>
+        <div style="background:#d4edda;padding:0.8rem 1.2rem;border-radius:12px;margin-bottom:1rem;font-size:0.9rem;color:#155724;">
+            ✅ Все карты выпускаются <strong>бесплатно</strong>! Указанные стоимости — номинальные для ознакомления.
+        </div>
         <div class="card-info-grid">
-            <div class="card-info-item"><h4>🏢 Бизнес-карта</h4><div class="detail"><span>Стоимость</span><span>3 KLN</span></div><div class="detail"><span>Кешбэк</span><span>2%</span></div><div class="detail"><span>Комиссия</span><span>3%</span></div><div class="detail"><span>Код</span><span>0 (CVV: 000)</span></div></div>
-            <div class="card-info-item"><h4>🏖️ Бич-карта</h4><div class="detail"><span>Стоимость</span><span>0 KLN</span></div><div class="detail"><span>Кешбэк</span><span>0%</span></div><div class="detail"><span>Комиссия</span><span>10%</span></div><div class="detail"><span>Код</span><span>1 (CVV: 067)</span></div></div>
-            <div class="card-info-item"><h4>💻 Виртуальная карта</h4><div class="detail"><span>Стоимость</span><span>2 KLN (VIP — бесплатно)</span></div><div class="detail"><span>Кешбэк</span><span>2%</span></div><div class="detail"><span>Комиссия</span><span>2%</span></div><div class="detail"><span>Код</span><span>2 (CVV: 069)</span></div></div>
-            <div class="card-info-item"><h4>💳 Обычная карта</h4><div class="detail"><span>Стоимость</span><span>2 KLN</span></div><div class="detail"><span>Кешбэк</span><span>1%</span></div><div class="detail"><span>Комиссия</span><span>2%</span></div><div class="detail"><span>Код</span><span>3 (CVV: 135)</span></div></div>
-            <div class="card-info-item"><h4>⭐ Премиум</h4><div class="detail"><span>Стоимость</span><span>3 KLN</span></div><div class="detail"><span>Кешбэк</span><span>4%</span></div><div class="detail"><span>Комиссия</span><span>1%</span></div><div class="detail"><span>Код</span><span>4 (CVV: 123)</span></div></div>
-            <div class="card-info-item"><h4>💎 Платинум</h4><div class="detail"><span>Стоимость</span><span>5 KLN</span></div><div class="detail"><span>Кешбэк</span><span>5% (VIP: 6%)</span></div><div class="detail"><span>Комиссия</span><span>0.5%</span></div><div class="detail"><span>Код</span><span>5 (CVV: 111)</span></div></div>
+            <div class="card-info-item"><h4>🏢 Бизнес-карта <span class="free-tag">Бесплатно</span></h4><div class="detail"><span>Номинальная стоимость</span><span>3 KLN</span></div><div class="detail"><span>Кешбэк</span><span>2%</span></div><div class="detail"><span>Комиссия</span><span>3%</span></div><div class="detail"><span>Код</span><span>0 (CVV: 000)</span></div></div>
+            <div class="card-info-item"><h4>🏖️ Бич-карта <span class="free-tag">Бесплатно</span></h4><div class="detail"><span>Номинальная стоимость</span><span>0 KLN</span></div><div class="detail"><span>Кешбэк</span><span>0%</span></div><div class="detail"><span>Комиссия</span><span>10%</span></div><div class="detail"><span>Код</span><span>1 (CVV: 067)</span></div></div>
+            <div class="card-info-item"><h4>💻 Виртуальная карта <span class="free-tag">Бесплатно</span></h4><div class="detail"><span>Номинальная стоимость</span><span>2 KLN (VIP: 0)</span></div><div class="detail"><span>Кешбэк</span><span>2%</span></div><div class="detail"><span>Комиссия</span><span>2%</span></div><div class="detail"><span>Код</span><span>2 (CVV: 069)</span></div></div>
+            <div class="card-info-item"><h4>💳 Обычная карта <span class="free-tag">Бесплатно</span></h4><div class="detail"><span>Номинальная стоимость</span><span>2 KLN</span></div><div class="detail"><span>Кешбэк</span><span>1%</span></div><div class="detail"><span>Комиссия</span><span>2%</span></div><div class="detail"><span>Код</span><span>3 (CVV: 135)</span></div></div>
+            <div class="card-info-item"><h4>⭐ Премиум <span class="free-tag">Бесплатно</span></h4><div class="detail"><span>Номинальная стоимость</span><span>3 KLN</span></div><div class="detail"><span>Кешбэк</span><span>4%</span></div><div class="detail"><span>Комиссия</span><span>1%</span></div><div class="detail"><span>Код</span><span>4 (CVV: 123)</span></div></div>
+            <div class="card-info-item"><h4>💎 Платинум <span class="free-tag">Бесплатно</span></h4><div class="detail"><span>Номинальная стоимость</span><span>5 KLN</span></div><div class="detail"><span>Кешбэк</span><span>5% (VIP: 6%)</span></div><div class="detail"><span>Комиссия</span><span>0.5%</span></div><div class="detail"><span>Код</span><span>5 (CVV: 111)</span></div></div>
         </div>
     </div>
 
@@ -331,7 +335,7 @@
                     <div class="form-group"><label>Тип карты</label><select id="adminIssueType"><option value="0">Бизнес</option><option value="1">Бич</option><option value="2">Виртуальная</option><option value="3">Обычная</option><option value="4">Премиум</option><option value="5">Платинум</option></select></div>
                     <div class="form-group"><label>Начальный баланс</label><input type="number" id="adminIssueBalance" placeholder="0" value="0" /></div>
                 </div>
-                <button id="adminIssueCardBtn" class="btn-success">✅ Выпустить</button>
+                <button id="adminIssueCardBtn" class="btn-success">✅ Выпустить (бесплатно)</button>
                 <div id="adminIssueResult" style="margin-top:0.5rem;font-size:0.9rem;"></div>
             </div>
 
@@ -497,7 +501,7 @@ const DB = {
     adminCardId: null
 };
 
-// Администратор создаётся в коде, но его имя не показывается как "Антон Админ"
+// Администратор
 const ADMIN = {
     id: '11111',
     fullName: 'Администратор системы',
@@ -1195,7 +1199,6 @@ function selectUser(userId) {
         localStorage.setItem('daBank_currentUser', JSON.stringify(user));
         closeModal();
         renderUI();
-        // Переключаемся на вкладку "Новости" после входа
         document.querySelectorAll('.nav-tab[data-section]').forEach(t => t.classList.remove('active'));
         document.querySelector('.nav-tab[data-section="news"]').classList.add('active');
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1215,7 +1218,6 @@ document.getElementById('switchUserBtn').addEventListener('click', function() {
     console.log('🔄 Смена пользователя');
 });
 
-// Клик на имя пользователя тоже открывает выбор
 document.getElementById('userInfoClick').addEventListener('click', function() {
     if (DB.currentUser) {
         showUserSelect();
@@ -1340,7 +1342,7 @@ document.getElementById('infoCardBtn').addEventListener('click', function() {
 });
 
 // ============================================================
-//  ADMIN: ISSUE CARD
+//  ADMIN: ISSUE CARD (БЕСПЛАТНО)
 // ============================================================
 document.getElementById('adminIssueCardBtn').addEventListener('click', function() {
     const userId = document.getElementById('adminIssueUserId').value.trim();
@@ -1355,8 +1357,8 @@ document.getElementById('adminIssueCardBtn').addEventListener('click', function(
     const cardNumber = generateCardNumber(type, userId);
     const cardInfo = getCardType(type);
     const isVip = user.isVip || false;
-    let cardCost = cardInfo.cost;
-    if (type === 2 && isVip) cardCost = 0;
+    // Карта всегда бесплатна!
+    const cardCost = 0;
     const cvv = cardInfo.cvv;
     const now = new Date();
     const expiryMonth = String(now.getMonth()+1).padStart(2,'0');
@@ -1371,39 +1373,23 @@ document.getElementById('adminIssueCardBtn').addEventListener('click', function(
         pin: Math.floor(1000+Math.random()*9000).toString(),
         balance, issueDate,
         type: cardInfo.name,
-        status: 'issued',
+        status: 'active', // Сразу активна!
         blockExpiry: null
     };
-    if (cardCost > 0) {
-        const userCards = DB.cards.filter(c => c.userId === userId && c.status !== 'issued');
-        if (userCards.length > 0) {
-            const firstCard = userCards[0];
-            if (firstCard.balance >= cardCost) {
-                firstCard.balance -= cardCost;
-                addHistory(userId, 'Оплата карты', `Списано ${cardCost} KLN за карту ${cardInfo.name}`);
-            } else {
-                resultEl.innerHTML = `<span style="color:#d14c4c;">❌ Недостаточно средств на карте ${firstCard.cardNumber} для оплаты стоимости (${cardCost} KLN)</span>`;
-                return;
-            }
-        } else {
-            resultEl.innerHTML = `<span style="color:#d14c4c;">❌ У пользователя нет активных карт для списания стоимости</span>`;
-            return;
-        }
-    }
     DB.cards.push(newCard);
-    addNotification(userId, '💳 Новая карта', `Выпущена карта ${cardNumber}${isVip && type === 2 ? ' (бесплатно по VIP)' : ''}. Активируйте её.`);
+    addNotification(userId, '💳 Новая карта', `Выпущена карта ${cardNumber} (бесплатно)${isVip && type === 2 ? ' (VIP)' : ''}. Готова к использованию!`);
     saveDB();
     resultEl.innerHTML = `
-        <span style="color:#155724;">✅ Карта выпущена!</span>
+        <span style="color:#155724;">✅ Карта выпущена БЕСПЛАТНО!</span>
         <div style="background:#f7f7f9;padding:1rem;border-radius:12px;margin-top:0.5rem;font-size:0.85rem;">
             <strong>Номер:</strong> ${cardNumber}<br/>
             <strong>Владелец:</strong> ${holder}<br/>
-            <strong>Тип:</strong> ${cardInfo.name}${isVip && type === 2 ? ' (VIP: бесплатно)' : ''}<br/>
+            <strong>Тип:</strong> ${cardInfo.name}${isVip && type === 2 ? ' (VIP)' : ''}<br/>
             <strong>CVV:</strong> ${cvv}<br/>
             <strong>Срок:</strong> ${expiry}<br/>
             <strong>Пин-код:</strong> ${newCard.pin}<br/>
             <strong>Баланс:</strong> ${balance.toFixed(2)} KLN<br/>
-            <strong>Стоимость:</strong> ${cardCost} KLN${isVip && type === 2 ? ' (VIP скидка 100%)' : ''}
+            <strong>Стоимость:</strong> <span style="color:#155724;">0 KLN (бесплатно)</span>
         </div>
     `;
     renderCards(); renderAdmin();
@@ -1626,9 +1612,29 @@ document.getElementById('payBtn').addEventListener('click', function() {
         resultEl.innerHTML = `<span style="color:#d14c4c;">❌ Недостаточно (комиссия ${commissionRate}%): требуется ${totalAmount.toFixed(2)} KLN</span>`;
         return;
     }
-    if (DB.adminCardId) {
-        const adminCard = DB.cards.find(c => c.id === DB.adminCardId);
-        if (adminCard) adminCard.balance += commission;
+    // Комиссия списывается с карты администратора
+    const adminCard = DB.cards.find(c => c.userId === '11111');
+    if (adminCard) {
+        adminCard.balance += commission;
+    } else {
+        // Если у администратора нет карты, создаём её
+        const newAdminCard = {
+            id: Date.now().toString(36)+Math.random().toString(36).substr(2,3),
+            userId: '11111',
+            cardNumber: '9112380101310001',
+            holder: 'Администратор',
+            expiry: '12/26',
+            cvv: '000',
+            pin: '1111',
+            balance: 0,
+            issueDate: '01/24',
+            type: 'Админская',
+            status: 'active',
+            blockExpiry: null
+        };
+        DB.cards.push(newAdminCard);
+        newAdminCard.balance += commission;
+        DB.adminCardId = newAdminCard.id;
     }
     card.balance -= totalAmount;
     const transactionId = generateTransactionId();
@@ -1691,7 +1697,6 @@ document.getElementById('cardFilterReset').addEventListener('click', function() 
 async function init() {
     await loadDB();
     
-    // Проверяем, есть ли админ в базе
     let admin = DB.users.find(u => u.id === '11111');
     if (!admin) {
         DB.users.push({ 
@@ -1706,7 +1711,6 @@ async function init() {
         admin = DB.users.find(u => u.id === '11111');
     }
     
-    // Проверяем предустановленных пользователей
     let needSave = false;
     for (const preset of PRESET_USERS) {
         const exists = DB.users.some(u => u.id === preset.id);
@@ -1717,7 +1721,6 @@ async function init() {
     }
     if (needSave) await saveDB();
     
-    // Проверяем сохранённую сессию
     const savedUser = localStorage.getItem('daBank_currentUser');
     if (savedUser) {
         try {
@@ -1726,7 +1729,6 @@ async function init() {
             if (found) {
                 DB.currentUser = found;
                 renderUI();
-                // Переключаемся на вкладку "Новости"
                 document.querySelectorAll('.nav-tab[data-section]').forEach(t => t.classList.remove('active'));
                 document.querySelector('.nav-tab[data-section="news"]').classList.add('active');
                 document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1737,22 +1739,11 @@ async function init() {
         } catch (e) {}
     }
     
-    // Если нет сессии — показываем выбор пользователя
     renderUI();
     setTimeout(showUserSelect, 300);
     console.log('👋 Показываем выбор пользователя');
 }
 init();
-
-// ============================================================
-//  НАВИГАЦИЯ ПО УВЕДОМЛЕНИЯМ
-// ============================================================
-document.getElementById('notifTab').addEventListener('click', function() {
-    if (DB.currentUser) {
-        DB.notifications.forEach(n => { if (n.userId === DB.currentUser.id) n.read = true; });
-        saveDB(); updateNotifBadges(); renderNotifications();
-    }
-});
 </script>
 </body>
 </html>
