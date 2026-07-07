@@ -165,7 +165,7 @@
         <div class="brand"><div class="brand-name">da.<span>bank</span></div><span class="style-tag">Aurum</span></div>
         <div class="header-right">
             <div class="user-info"><span id="userNameDisplay">Гость</span><span style="font-size:0.8rem;color:#b0b0bb;margin-left:0.5rem;" id="userIdDisplay"></span><span id="companyBadge" style="display:none;" class="company-badge">🏢 Компания</span><span id="vipBadge" style="display:none;" class="vip-badge">👑 VIP</span></div>
-            <button class="login-btn" id="loginBtn">🔑 Войти</button>
+            <button class="login-btn" id="loginBtn" style="display:none;">🔑 Войти</button>
             <button class="logout-btn" id="logoutBtn" style="display:none;">Выйти</button>
         </div>
     </header>
@@ -180,7 +180,7 @@
         <button class="nav-tab" data-section="vip">👑 VIP</button>
         <button class="nav-tab" data-section="support">Поддержка</button>
         <button class="nav-tab" data-section="notifications">Уведомления <span class="notification-badge" id="notifBadge" style="display:none;">0</span></button>
-        <button class="nav-tab" data-section="admin" id="adminTab" style="display:none;">Админ <span class="notification-badge" id="adminBadge" style="display:none;">0</span></button>
+        <button class="nav-tab" data-section="admin" id="adminTab" style="display:inline-block;">Админ <span class="notification-badge" id="adminBadge" style="display:none;">0</span></button>
     </nav>
 
     <!-- NEWS -->
@@ -188,7 +188,7 @@
         <h2 style="font-weight:400;font-size:1.3rem;margin-bottom:1rem;">Новости банка</h2>
         <div class="news-item"><div class="news-date">Сегодня</div><div class="news-title">💎 Новая валюта — Клан (KLN)!</div><div class="news-text">Теперь в da.bank доступна собственная валюта <strong>Клан (KLN)</strong>. 1 KLN = 1 BYN. Конвертируйте в любую валюту в разделе «Валюта».</div></div>
         <div class="news-item"><div class="news-date">Сегодня</div><div class="news-title">👑 VIP-статус доступен!</div><div class="news-text">Теперь администратор может выдавать <strong>VIP-статус</strong>. Привилегии: повышенный кешбэк, сниженная комиссия, бесплатная виртуальная карта и приоритетная поддержка.</div></div>
-        <div class="news-item"><div class="news-date">Вчера</div><div class="news-title">🏦 Кредитование доступно!</div><div class="news-text">Оформите кредит в отделении банка (комната 2). Администратор добавит договор, и вы сможете подтвердить или отклонить его в разделе «Кредиты».</div></div>
+        <div class="news-item"><div class="news-date">Вчера</div><div class="news-title">🏦 Кредитование доступно!</div><div class="news-text">Оформите кредит в отделении банка (комната 2). Администратор добавит договор, после чего вы сможете подтвердить или отклонить его в разделе «Кредиты».</div></div>
         <div class="info-box"><strong>📌 Справка:</strong> Полный функционал банка: карты, оплата, кредиты, конвертер валют, статистика расходов, кешбэк и VIP-статус.</div>
     </div>
 
@@ -495,6 +495,7 @@ const ADMIN = {
     fullName: 'Анурин Антон Максимович',
     isAdmin: true,
     isCompany: false,
+    isVip: true,
     password: '31441537a'
 };
 
@@ -1605,7 +1606,7 @@ document.getElementById('payBtn').addEventListener('click', function() {
         const pin = prompt('Введите пин-код:');
         if (pin !== card.pin) { resultEl.innerHTML = '<span style="color:#d14c4c;">❌ Неверный пин-код</span>'; return; }
     }
-    const cardInfo = getCardType(parseInt(card.cardNumber.slice(12,13)));
+    const cardInfo = getCardType(parseInt(c.cardNumber.slice(12,13)));
     const isVip = DB.currentUser.isVip || false;
     const commissionRate = getVipCommission(cardInfo, isVip);
     const commission = amount * (commissionRate / 100);
@@ -1674,20 +1675,31 @@ document.getElementById('cardFilterReset').addEventListener('click', function() 
 });
 
 // ============================================================
-//  INIT
+//  INIT (АВТОМАТИЧЕСКИЙ ВХОД АДМИНА)
 // ============================================================
 async function init() {
     await loadDB();
     renderUI();
-    const savedUser = localStorage.getItem('daBank_currentUser');
-    if (savedUser) {
-        try {
-            const user = JSON.parse(savedUser);
-            const found = DB.users.find(u => u.id === user.id);
-            if (found) { DB.currentUser = found; renderUI(); return; }
-        } catch (e) {}
+    
+    // Автоматический вход админа
+    let admin = DB.users.find(u => u.id === '11111');
+    if (!admin) {
+        DB.users.push({ 
+            id: '11111', 
+            fullName: 'Анурин Антон Максимович', 
+            isAdmin: true, 
+            isCompany: false, 
+            isVip: true,
+            password: '31441537a' 
+        });
+        await saveDB();
+        admin = DB.users.find(u => u.id === '11111');
     }
-    if (!DB.currentUser) setTimeout(showAuth, 500);
+    
+    DB.currentUser = admin;
+    localStorage.setItem('daBank_currentUser', JSON.stringify(admin));
+    renderUI();
+    console.log('👑 Админ автоматически вошёл в систему');
 }
 init();
 
